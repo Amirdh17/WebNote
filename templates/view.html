@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %} View {% endblock %}
+
+{% block main %}
+    {% if data %}
+        {% for row in data %}
+            <form action="/view" method="post" onsubmit="askUser(row['note_id']);">
+                <input value="{{ row['note_id'] }}" name="note_id" hidden>
+                <div class="form-group mb-3 ">
+                    <label for="head">Heading:    <span class="right">Last update: {{row['dt']}} {{row['tm']}}</span></label>
+                    <input class="form-control" autocomplete="off" type="text" maxlength="100" placeholder="Write the heading (100 characters only)" value="{{row['heading']}}" required id="head{{ row['note_id'] }}" name="head{{ row['note_id'] }}" onkeypress="return event.keyCode != 13;" disabled>
+                </div>
+                <div class="form-group shadow-textarea mb-3">
+                    <label for="notes">Notes: </label>
+                    <textarea class="form-control"  autocomplete="off" wrap="off" cols="30" rows="5" placeholder="Write your notes here" id="notes{{ row['note_id'] }}" name="notes{{ row['note_id'] }}" required disabled>{{row['noted']}}</textarea>
+                </div>
+                <button class="btn btn-primary" type="submit" id="update{{ row['note_id'] }}" name="action" value="update" disabled>Update</button>
+                <button class="btn btn-primary" type="button" onclick="allowEdit({{ row['note_id'] }});" id="edit">Edit</button>
+                <button class="btn btn-primary" type="submit" id="delete{{ row['note_id'] }}" name="action" value="delete" >Delete</button>
+            </form>
+
+        {% endfor %}
+
+    {% else %}
+            <p style="color:red">There is no saved notes to display!</p>
+    {% endif %}
+
+    <script>
+        function allowEdit(id) {
+            const head = document.getElementById(`head${id}`);
+            const noted = document.getElementById(`notes${id}`);
+            const btn = document.getElementById(`update${id}`);
+            head.disabled = false;
+            noted.disabled = false;
+            btn.disabled = false;
+        }
+        function askUser(id) {
+            const del = document.getElementById(`delete${id}`);
+            if (del.value) {
+                return confirm("Do you want to delete the note permanently?");
+            }
+            return true;
+        }
+    </script>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %} Index {% endblock %}
+
+{% block main %}
+    <form action="/" method="post">
+
+        <div class="form-group mb-3 ">
+            <label for="head">Heading: </label>
+            <input class="form-control" autocomplete="off" autofocus type="text" maxlength="100" placeholder="Write the heading (100 characters only)" required onkeypress="return event.keyCode != 13;" id="head" name="head">
+        </div>
+
+        <div class="form-group shadow-textarea mb-3">
+            <label for="notes">Notes: </label>
+            <textarea class="form-control notes"  autocomplete="off" wrap="off" cols="30" rows="5" placeholder="Write your notes here" id="notes" name="notes" required></textarea>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Save</button>
+
+    </form>
+
+{% endblock %}
