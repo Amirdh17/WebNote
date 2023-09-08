@@ -1,4 +1,5 @@
 # WebNote
+<<<<<<< HEAD
 #### Video Demo: https://youtu.be/FOVf_6zC3Mk
 #### Description:
 ## Introduction
@@ -25,3 +26,12 @@ Sqlite3 database is used to manage the database. Database is created on name web
 It is python file where functions were defined so that those function can be imported into the app python file. It has function definition for login_required (it ensure user has logged in), checkValidPass (it check some condition for password), remember_login (it save user id in session), get_db_connection (it is used to connect with database), getJulianday (It is used to get julianday of current time).
 ## Conclusion
 This notes taking web based application allow the user to take notes at anywhere and anytime. Notes written by the user can be protected and can be used in future. By building this application, I got familiarize with Flask framework , python, HTML, CSS, JavaScript, bootstrap and sql commands. Thank you David Malan and CS50 team for this good opportunity to explore computer science.
+=======
+This is a online notes taking web-based application. It is developed using Flask framework. User can register a separate account and can take notes and save, edit and delete it. By developing this application, I got good experiance in developing user authentication, frontend and backend.
+
+# Framwork: Flask
+# Frontend: HTML, CSS, JavaScript and Bootstrap
+# Backend: Python
+# Database: Sqlite3
+
+>>>>>>> 5aa6f8605d8fae4e69a27a1a4c5a44d09787e021
