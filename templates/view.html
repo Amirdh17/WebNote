@@ -3,21 +3,33 @@
 {% block title %} View {% endblock %}
 
 {% block main %}
+    <form action="/view" method="post">
+        <div class="input-group rounded">
+            <input type="search" class="form-control rounded" name="sname" placeholder="Type the heading to Search" aria-label="Search" aria-describedby="search-addon" />
+            <button type="submit" name="action" value="search">
+            <span class="input-group-text border-0" id="search-addon">
+            <i class="fa fa-search"></i>
+            </span>
+            </button>
+        </div>
+    </form>
     {% if data %}
         {% for row in data %}
-            <form action="/view" method="post" onsubmit="askUser(row['note_id']);">
+            <form action="/view" method="post" >
                 <input value="{{ row['note_id'] }}" name="note_id" hidden>
-                <div class="form-group mb-3 ">
-                    <label for="head">Heading:    <span class="right">Last update: {{row['dt']}} {{row['tm']}}</span></label>
+                <div class="form-group mb-3 " style="text-align:left;">
+                    <label for="head{{ row['note_id'] }}" style="text-align:left;">Heading:</label>
+                    <span style="text-align:right;">Last update: {{row['dt']}} {{row['tm']}}</span>
                     <input class="form-control" autocomplete="off" type="text" maxlength="100" placeholder="Write the heading (100 characters only)" value="{{row['heading']}}" required id="head{{ row['note_id'] }}" name="head{{ row['note_id'] }}" onkeypress="return event.keyCode != 13;" disabled>
                 </div>
                 <div class="form-group shadow-textarea mb-3">
-                    <label for="notes">Notes: </label>
+                    <label for="notes{{ row['note_id'] }}">Notes: </label>
                     <textarea class="form-control"  autocomplete="off" wrap="off" cols="30" rows="5" placeholder="Write your notes here" id="notes{{ row['note_id'] }}" name="notes{{ row['note_id'] }}" required disabled>{{row['noted']}}</textarea>
                 </div>
+                <p style="text-align:right;" id="count{{ row['note_id'] }}"></p>
                 <button class="btn btn-primary" type="submit" id="update{{ row['note_id'] }}" name="action" value="update" disabled>Update</button>
                 <button class="btn btn-primary" type="button" onclick="allowEdit({{ row['note_id'] }});" id="edit">Edit</button>
-                <button class="btn btn-primary" type="submit" id="delete{{ row['note_id'] }}" name="action" value="delete" >Delete</button>
+                <input class="btn btn-primary" type="submit" onclick="return askUser('{{row['heading']}}')" id="delete{{ row['note_id'] }}" name="action" value="delete" >
             </form>
 
         {% endfor %}
@@ -28,19 +40,36 @@
 
     <script>
         function allowEdit(id) {
+            // Let user edit the textarea
             const head = document.getElementById(`head${id}`);
             const noted = document.getElementById(`notes${id}`);
             const btn = document.getElementById(`update${id}`);
             head.disabled = false;
             noted.disabled = false;
             btn.disabled = false;
-        }
-        function askUser(id) {
-            const del = document.getElementById(`delete${id}`);
-            if (del.value) {
-                return confirm("Do you want to delete the note permanently?");
+
+            // count the words and mark the limit
+            const text = document.getElementById(`notes${id}`);
+            const counter = document.getElementById(`count${id}`);
+            let maxWord = 500;
+            function removeEmpty(word) {
+                return word != "";
             }
-            return true;
+            text.addEventListener('input', function() {
+                let words = text.value.replace( /\n/g, " " ).split(" ");
+                words = words.filter(removeEmpty);
+                let word_count = words.length;
+                if (word_count >= maxWord) {
+                    text.maxLength = words.join(" ").length;
+                }
+                else {
+                    text.removeAttribute("maxLength");
+                }
+                counter.textContent = `${word_count}/500`;
+            });
+        }
+        function askUser(heading) {
+            return confirm(`Do you want to delete ${heading} note permanently?`);
         }
     </script>
 

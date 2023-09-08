@@ -2,14 +2,25 @@ body{
     background-color: #FFE019;
 }
 .notes {
-    height: 800px;
+    height: 500px;
 }
 .formview {
     width: 90%;
     margin-left: 5%;
     margin-right: 5%;
 }
-.right {
-    text-align: right;
+.brand {
+    font-weight:bold;
+    font-size: 24px;
+}
+.links:hover {
+    text-decoration:underline;
 }
 
+
+@media screen and (min-width: 480px) {
+    .brand {
+        font-size: 36px;
+        font-weight:bold;
+    }
+}

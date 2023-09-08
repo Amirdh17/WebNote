@@ -163,7 +163,7 @@ def view():
     id = session.get("user_id")
     con = get_db_connection()
     cur = con.cursor()
-    cur.execute("select note_id, heading, noted, date(dateandtime) AS dt, time(dateandtime) AS tm from notes where user_id = ?", [id])
+    cur.execute("SELECT note_id, heading, noted, date(dateandtime) AS dt, time(dateandtime) AS tm FROM notes WHERE user_id = ? ORDER BY DATE(dateandtime) DESC, TIME(dateandtime) DESC", [id])
     rows = cur.fetchall()
     con.close()
 
@@ -185,6 +185,15 @@ def view():
                 con.commit()
                 con.close()
 
+        elif action == "search":
+            word = request.form.get("sname")
+            con = get_db_connection()
+            cur = con.cursor()
+            cur.execute("SELECT note_id, heading, noted, date(dateandtime) AS dt, time(dateandtime) AS tm FROM notes WHERE user_id = ? AND heading LIKE ? ORDER BY DATE(dateandtime) DESC, TIME(dateandtime) DESC", [id, "%" + word + "%"])
+            rows = cur.fetchall()
+            con.close()
+            return render_template("view.html", data=rows)
+
         else:
             note_id = request.form.get('note_id')
             con = get_db_connection()
@@ -195,7 +204,7 @@ def view():
 
         con = get_db_connection()
         cur = con.cursor()
-        cur.execute("select note_id, heading, noted, date(dateandtime) AS dt, time(dateandtime) AS tm from notes where user_id = ?", [id])
+        cur.execute("SELECT note_id, heading, noted, date(dateandtime) AS dt, time(dateandtime) AS tm FROM notes WHERE user_id = ? ORDER BY DATE(dateandtime) DESC, TIME(dateandtime) DESC", [id])
         rows = cur.fetchall()
         con.close()
 

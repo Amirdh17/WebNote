@@ -14,9 +14,31 @@
             <label for="notes">Notes: </label>
             <textarea class="form-control notes"  autocomplete="off" wrap="off" cols="30" rows="5" placeholder="Write your notes here" id="notes" name="notes" required></textarea>
         </div>
+        <p style="text-align:right;" id="count"></p>
 
         <button class="btn btn-primary" type="submit">Save</button>
 
     </form>
+
+    <script>
+        const text = document.getElementById("notes");
+        const counter = document.getElementById("count");
+        let maxWord = 500;
+        function removeEmpty(word) {
+            return word != "";
+        }
+        text.addEventListener('input', function() {
+            let words = text.value.replace( /\n/g, " " ).split(" ");
+            words = words.filter(removeEmpty);
+            let word_count = words.length;
+            if (word_count >= maxWord) {
+                text.maxLength = words.join(" ").length;
+            }
+            else {
+                text.removeAttribute("maxLength");
+            }
+            counter.textContent = `${word_count}/500`;
+        });
+    </script>
 
 {% endblock %}
